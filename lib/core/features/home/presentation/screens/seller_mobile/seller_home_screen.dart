@@ -3,6 +3,7 @@ import 'package:v_library/core/features/Widgets/app_button_widget.dart';
 import 'package:v_library/core/features/Widgets/app_drop_down.dart';
 import 'package:v_library/core/features/Widgets/appbar_widget.dart';
 import 'package:v_library/core/features/Widgets/search_widget.dart';
+import 'package:v_library/core/features/home/presentation/screens/seller_mobile/seller_create_step1.dart';
 import 'package:v_library/core/utils/colors.dart';
 import 'package:v_library/core/utils/uihelper.dart';
 
@@ -108,7 +109,13 @@ class _SellerHomeScreenState extends State<SellerHomeScreen>with SingleTickerPro
                       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           SizedBox(),
-                          AppButtonWidget(label: " Create", onPress: (){}, isIcon: true,),
+                          AppButtonWidget(label: " Create", onPress: (){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SellerCreateStep1Screen()),
+                            );
+                          }, isIcon: true,),
                         ],
                       )
                     ],
