@@ -11,6 +11,7 @@ const color_B8B7C7 = Color(0xFFB8B7C7);
 const color_heading = Color(0xFF858491);
 const color_EE4266 = Color(0xFFEE4266);
 const errorColor = Color(0xFFEE4266);
+const successColor = Color(0xFF00812C);
 const color_615BC9 = Color(0xFF615BC9);
 const color_E6E6E6 = Color(0xFFE6E6E6);
 

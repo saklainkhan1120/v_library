@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:v_library/core/features/home/presentation/screens/home_page.dart';
 import 'package:v_library/core/features/home/presentation/screens/onboarding%20page/onboaring_page.dart';
+import 'package:v_library/core/features/home/presentation/screens/seller_mobile/seller_home_screen.dart';
 import 'package:v_library/core/features/splash/presentation/screens/splash_screen.dart'; // Ensure this import is correct and the file exists
 
 void main() {
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/splash': (context) => const SplashScreen(),
           '/OnboaringPage': (context) => OnboaringPage(),
+          '/SellerHomeScreen': (context) => SellerHomeScreen(),
           '/home': (context) => const HomeScreen(),
         },
       ),
