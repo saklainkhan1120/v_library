@@ -7,6 +7,7 @@ import 'package:v_library/core/features/home/presentation/screens/seller_mobile/
 import 'package:v_library/core/features/splash/presentation/screens/splash_screen.dart'; // Ensure this import is correct and the file exists
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
