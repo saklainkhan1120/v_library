@@ -3,19 +3,19 @@ import 'package:flutter/material.dart';
 import '../../utils/colors.dart';
 
 class SearchWidget extends StatelessWidget {
-   final Function(String val) onChange;
-   const SearchWidget({ required this.onChange,
+  final Function(String val) onChange;
+  const SearchWidget({
+    required this.onChange,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 0.0),
       child: SizedBox(
         height: 48, // Fixed height
         child: TextField(
-          onChanged: onChange,
           decoration: InputDecoration(
             hintText: 'Search anything',
             hintStyle: const TextStyle(fontSize: 16, color: Colors.grey),
@@ -34,20 +34,18 @@ class SearchWidget extends StatelessWidget {
             ),
             suffixIcon: Padding(
               padding: const EdgeInsets.all(2.0),
-              child: Card(
-                color: primaryColorCode,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Icon(Icons.tune,
-                      color: Colors.white, size: 19.1), // Icon size
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image.asset(
+                  'assets/icons/mike.png', // Path to your image
+                  width: 25, // Icon width
+                  height: 25, // Icon height
+                  fit: BoxFit.contain, // Ensures the image fits nicely
                 ),
               ),
             ),
             contentPadding:
-            const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide.none,

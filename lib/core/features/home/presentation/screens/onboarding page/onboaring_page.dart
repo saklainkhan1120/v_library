@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:v_library/core/features/Widgets/appbar_widget.dart';
 import 'package:v_library/core/features/Widgets/search_widget.dart';
 import 'package:v_library/core/features/home/presentation/screens/buyer_mobile/buyer_home_screen.dart';
+import 'package:v_library/core/features/home/presentation/screens/home_page.dart';
 import 'package:v_library/core/features/home/presentation/screens/seller_mobile/seller_home_screen.dart';
 import 'package:v_library/core/utils/alert_pop.dart';
-import 'package:v_library/core/utils/colors.dart';
 import 'package:v_library/core/utils/uihelper.dart';
 
 class OnboaringPage extends StatelessWidget {
@@ -22,40 +22,8 @@ class OnboaringPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: PreferredSize(preferredSize: Size.fromHeight(50),
-      child: AppBarWidget()),
-      drawer: Drawer(
-        backgroundColor: Colors.grey,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: const <Widget>[
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.grey,
-              ),
-              child: Text(
-                'Drawer Header',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 24,
-                ),
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.message, color: Colors.black),
-              title: Text('Messages', style: TextStyle(color: Colors.black)),
-            ),
-            ListTile(
-              leading: Icon(Icons.account_circle, color: Colors.black),
-              title: Text('Profile', style: TextStyle(color: Colors.black)),
-            ),
-            ListTile(
-              leading: Icon(Icons.settings, color: Colors.black),
-              title: Text('Settings', style: TextStyle(color: Colors.black)),
-            ),
-          ],
-        ),
-      ),
+      appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(50), child: AppBarWidget()),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
@@ -72,25 +40,17 @@ class OnboaringPage extends StatelessWidget {
 
             // Search Bar
             SearchWidget(
-              onChange: (val){},
+              onChange: (val) {},
             ),
 
-            // Grid of Icons
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(top:20.0, bottom: 20.0),
-                child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 90, // Maximum width of each grid item
-                    mainAxisSpacing: 8.0,
-                    crossAxisSpacing: 8.0,
-                    childAspectRatio: 1, // Ensure square items
-                  ),
-                  itemCount: gridItems.length,
-                  itemBuilder: (context, index) {
-                    return _buildGridItem(context,gridItems[index]);
-                  },
-                ),
+            // Single Row of Icons
+            Padding(
+              padding: const EdgeInsets.only(top: 20.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: gridItems.map((item) {
+                  return _buildGridItem(context, item);
+                }).toList(),
               ),
             ),
           ],
@@ -99,59 +59,78 @@ class OnboaringPage extends StatelessWidget {
     );
   }
 
-  Widget _buildGridItem(BuildContext context ,GridItem item) {
+  Widget _buildGridItem(BuildContext context, GridItem item) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         onItemPresses(context, item.title);
       },
-      child: Column(crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          // Icon Container
           Container(
-            width: 40, // Icon size
-            height: 40, // Icon size
+            width: 60, // Adjust the icon size as per your requirement
+            height: 60,
             decoration: BoxDecoration(
               color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(8.0),
+              borderRadius: BorderRadius.circular(12.0),
             ),
             child: Image.asset(
               item.imagePath,
-              width: 24, // Adjust icon size inside the container
-              height: 24,
+              width: 30,
+              height: 30,
             ),
           ),
-          const SizedBox(height: 4), // Spacing between icon and text
-          Text(
-            item.title,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w500),
+          const SizedBox(height: 8), // Spacing between icon and text
+
+          // Text Below Icon
+          SizedBox(
+            width: 70, // Fixed width for proper alignment
+            child: Text(
+              item.title,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: Colors.black,
+              ),
+              maxLines: 2, // Ensures text breaks into 2 lines
+              overflow: TextOverflow.visible, // No ellipsis, wraps the text
+              softWrap: true, // Enables wrapping for text
+            ),
           ),
         ],
       ),
     );
   }
 
-
-  void onItemPresses(BuildContext context, String value){
-    if(value == "Virtual Library"){
-      showInfoDialog(context, AlertHelper.getPopTwoButton("Seller", "Buyer",
-              (){
-        Navigator.of(context).pop();
-        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>SellerHomeScreen()));
-          },
-              (){
-        Navigator.of(context).pop();
-            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>BuyerHomeScreen()));
+  void onItemPresses(BuildContext context, String value) {
+    if (value == "Virtual Library") {
+      // Dialog for Virtual Library
+      showInfoDialog(
+          context,
+          AlertHelper.getPopTwoButton("Seller", "Buyer", () {
+            Navigator.of(context).pop();
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => SellerHomeScreen()));
+          }, () {
+            Navigator.of(context).pop();
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => BuyerHomeScreen()));
           }));
-         }else {
+    } else if (value == "Lectures & Classes") {
+      // Navigate to HomeScreen
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => HomeScreen(), // HomeScreen to be navigated
+        ),
+      );
+    } else {
+      // For other icons
       showAlertDialog(context, "Not available!");
     }
   }
-
 }
-
-
-
 
 class GridItem {
   final String title;

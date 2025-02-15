@@ -4,6 +4,7 @@ import 'package:v_library/core/utils/colors.dart';
 class AppBarWidget extends StatelessWidget {
   final bool isAuth;
   final String title;
+
   const AppBarWidget({
     this.isAuth = true,
     this.title = '',
@@ -13,13 +14,19 @@ class AppBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20),
+      padding: const EdgeInsets.only(left: 10, right: 10),
       child: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         titleSpacing: 6,
-        title: Visibility(visible: !isAuth,
-            child: Text(title, style: TextStyle(fontWeight: FontWeight.w600),)),
+        title: Visibility(
+          visible: !isAuth,
+          child: Text(
+            title,
+            style: const TextStyle(
+                fontWeight: FontWeight.w600, color: Colors.black),
+          ),
+        ),
         leading: Container(
           height: 45,
           width: 45,
@@ -38,54 +45,59 @@ class AppBarWidget extends StatelessWidget {
         ),
         actions: [
           // Login Button
-          Visibility(visible: isAuth,
-            child: TextButton(
-              onPressed: () {
-                // Navigate to Login
-              },
-              style: TextButton.styleFrom(
-                backgroundColor: primaryColorCode,
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+          Visibility(
+            visible: isAuth,
+            child: SizedBox(
+              width: 105, // Fixed width
+              height: 45, // Fixed height
+              child: OutlinedButton(
+                onPressed: () {
+                  // Navigate to Login
+                },
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(color: primaryColorCode, width: 1.5),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  padding: EdgeInsets.zero, // No extra padding
                 ),
-              ),
-              child: const Text(
-                'Login',
-                style: TextStyle(color: Colors.white, fontSize: 14),
+                child: const Text(
+                  'Login',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ),
             ),
           ),
           const SizedBox(width: 8), // Spacing between buttons
           // Signup Button
-          Visibility(visible: isAuth,
-            child: TextButton(
-              onPressed: () {
-                // Navigate to Signup
-              },
-              style: TextButton.styleFrom(
-                backgroundColor: primaryColorCode,
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+          Visibility(
+            visible: isAuth,
+            child: SizedBox(
+              width: 105, // Fixed width
+              height: 45, // Fixed height
+              child: TextButton(
+                onPressed: () {
+                  // Navigate to Signup
+                },
+                style: TextButton.styleFrom(
+                  backgroundColor: primaryColorCode,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  padding: EdgeInsets.zero, // No extra padding
                 ),
-              ),
-              child: const Text(
-                'Signup',
-                style: TextStyle(color: Colors.white, fontSize: 14),
+                child: const Text(
+                  'Signup',
+                  style: TextStyle(color: Colors.white, fontSize: 14),
+                ),
               ),
             ),
           ),
           const SizedBox(width: 8), // Spacing after buttons
-          IconButton(
-            icon: Image.asset('assets/icons/bell.png', width: 24, height: 24),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Image.asset('assets/icons/mail.png', width: 24, height: 24),
-            onPressed: () {},
-          ),
-          const SizedBox(width: 8), // Reduced gap
         ],
       ),
     );
