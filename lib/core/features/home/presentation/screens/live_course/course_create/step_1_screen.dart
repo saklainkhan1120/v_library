@@ -217,7 +217,7 @@ class _LiveStepOneScreenState extends State<LiveStepOneScreen> {
               Row(
                 children: [
                   const Text(
-                    "Auto create course group",
+                    "Auto create course_bloc group",
                     style: TextStyle(fontSize: 16),
                   ),
                   const Spacer(),
@@ -235,7 +235,7 @@ class _LiveStepOneScreenState extends State<LiveStepOneScreen> {
               Row(
                 children: [
                   const Text(
-                    "Post my course in related groups ",
+                    "Post my course_bloc in related groups ",
                     style: TextStyle(fontSize: 16),
                   ),
                   const Spacer(),

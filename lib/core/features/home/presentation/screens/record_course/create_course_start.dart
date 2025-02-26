@@ -132,7 +132,7 @@ class _Step1ScreenState extends State<Step1Screen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Auto create course group"),
+                Text("Auto create course_bloc group"),
                 Switch(
                   value: autoCreateCourseGroup,
                   onChanged: (value) {

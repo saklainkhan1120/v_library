@@ -128,7 +128,7 @@ class _StepFiveScreenState extends State<StepFiveScreen> {
               Row(
                 children: [
                   const Text(
-                    "Auto design course flyer",
+                    "Auto design course_bloc flyer",
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                   ),
                   const Spacer(),

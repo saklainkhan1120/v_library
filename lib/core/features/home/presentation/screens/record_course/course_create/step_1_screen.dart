@@ -216,7 +216,7 @@ class _RecordStepOneScreenState extends State<RecordStepOneScreen> {
               Row(
                 children: [
                   const Text(
-                    "Auto create course group",
+                    "Auto create course_bloc group",
                     style: TextStyle(fontSize: 16),
                   ),
                   const Spacer(),

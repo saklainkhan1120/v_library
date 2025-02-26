@@ -172,7 +172,7 @@ class _StepOneScreenState extends State<LiveStepOneScreentwo> {
 
               // Target audience Dropdown
               const Text(
-                "Target audience (course for)",
+                "Target audience (course_bloc for)",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
