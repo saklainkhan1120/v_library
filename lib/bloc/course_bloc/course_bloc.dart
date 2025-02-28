@@ -21,3 +21,23 @@ class CourseBloc extends Bloc<CourseEvent, CourseState> {
     }
   }
 }
+
+class CreateCourseBloc extends Bloc<CreateCourseEvent, CreateCourseState> {
+  final CourseRepository repository;
+
+  CreateCourseBloc(this.repository) : super(CreateCourseInitial()) {
+    on<CreateCourse>(_createCourse);
+  }
+
+  Future<void> _createCourse(
+      CreateCourse event, Emitter<CreateCourseState> emit) async {
+    emit(CreateCourseLoading());
+
+    try {
+      await repository.createCourse(event.course);
+      emit(CreateCourseSuccess());
+    } catch (e) {
+      emit(CreateCourseFailure(error: e.toString()));
+    }
+  }
+}

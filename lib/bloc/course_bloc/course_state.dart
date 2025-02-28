@@ -27,3 +27,24 @@ class CourseError extends CourseState {
   @override
   List<Object> get props => [message];
 }
+
+
+//create course
+abstract class CreateCourseState extends Equatable {
+  @override
+  List<Object> get props => [];
+}
+
+class CreateCourseInitial extends CreateCourseState {}
+
+class CreateCourseLoading extends CreateCourseState {}
+
+class CreateCourseSuccess extends CreateCourseState {}
+
+class CreateCourseFailure extends CreateCourseState {
+  final String error;
+  CreateCourseFailure({required this.error});
+
+  @override
+  List<Object> get props => [error];
+}
