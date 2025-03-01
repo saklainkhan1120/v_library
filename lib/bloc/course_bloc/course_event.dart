@@ -25,3 +25,19 @@ class CreateCourse extends CreateCourseEvent {
   @override
   List<Object> get props => [course];
 }
+
+
+abstract class ClassScheduleEvent extends Equatable {
+  @override
+  List<Object> get props => [];
+}
+
+class UpdateClassSchedule extends ClassScheduleEvent {
+  final String classId;
+  final Map<String, dynamic> scheduleData;
+
+  UpdateClassSchedule({required this.classId, required this.scheduleData});
+
+  @override
+  List<Object> get props => [classId, scheduleData];
+}

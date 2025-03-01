@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:v_library/bloc/course_bloc/course_bloc.dart';
 import 'package:v_library/core/features/home/presentation/screens/live_course/course_create/step_3_screen.dart';
 import 'package:v_library/core/utils/colors.dart';
+import 'package:v_library/repository/course_repo.dart';
+
+import '../../../../../../../bloc/course_bloc/course_event.dart';
+import '../../../../../../../bloc/course_bloc/course_state.dart';
+import '../../list_item/update_class_schedule.dart';
 
 class StepTwoScreen extends StatefulWidget {
   const StepTwoScreen({super.key});
@@ -10,6 +17,8 @@ class StepTwoScreen extends StatefulWidget {
 }
 
 class _StepTwoScreenState extends State<StepTwoScreen> {
+
+  CourseRepository courseRepository = CourseRepository();
   int currentStep = 2; // Step 2 is active
   DateTime? selectedStartDate;
   DateTime? selectedEndDate;
@@ -19,6 +28,7 @@ class _StepTwoScreenState extends State<StepTwoScreen> {
   TextEditingController endDateController = TextEditingController();
   TextEditingController startTimeController = TextEditingController();
   TextEditingController endTimeController = TextEditingController();
+  final TextEditingController customFrequencyController = TextEditingController();
   String? selectedNumberOfLectures; // For No. of live lectures dropdown
   String? selectedFrequency; // For Frequency of classes dropdown
   bool isSwitchEnabled = false; // For toggle switch
@@ -382,11 +392,22 @@ class _StepTwoScreenState extends State<StepTwoScreen> {
                 ElevatedButton(
                   onPressed: () {
                     Navigator.pop(context); // Close the dialog
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => LiveStepThreeScreen()),
-                    );
+
+        final Map<String, dynamic> scheduleData = {
+        "startDate": startDateController.text,
+        "endDate": endDateController.text,
+        "startTime": startTimeController.text,
+        "endTime": endTimeController.text,
+        "numberOfClasses": int.tryParse(selectedNumberOfLectures?? '0') ?? 0,
+        "frequency": selectedFrequency,
+        "customFrequency": customFrequencyController.text.split(","),
+        };
+
+                    context.read<ClassScheduleBloc>().add(UpdateClassSchedule(
+                      classId: "123", // Replace with actual ID
+                      scheduleData: scheduleData,
+                    ));
+
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primaryColorCode,
@@ -409,152 +430,214 @@ class _StepTwoScreenState extends State<StepTwoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
+    return BlocProvider(
+      create: (context)=>ClassScheduleBloc(repository: courseRepository),
+      child: Scaffold(
         backgroundColor: Colors.white,
-        elevation: 0,
-        titleSpacing: 6,
-        leading: Container(
-          height: 45,
-          width: 45,
-          margin: const EdgeInsets.all(6.0),
-          decoration: BoxDecoration(
-            color: backGroundColor,
-            shape: BoxShape.rectangle,
-            borderRadius: BorderRadius.circular(8),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          titleSpacing: 6,
+          leading: Container(
+            height: 45,
+            width: 45,
+            margin: const EdgeInsets.all(6.0),
+            decoration: BoxDecoration(
+              color: backGroundColor,
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.menu, color: Colors.black),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            ),
           ),
-          child: IconButton(
-            icon: const Icon(Icons.menu, color: Colors.black),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
+          title: const Text(
+            'Hi, Smriti',
+            style: TextStyle(
+                color: Colors.black, fontWeight: FontWeight.w700, fontSize: 24),
           ),
+          actions: [
+            IconButton(
+              icon: Image.asset('assets/icons/bell.png', width: 24, height: 24),
+              onPressed: () {},
+            ),
+            IconButton(
+              icon: Image.asset('assets/icons/mail.png', width: 24, height: 24),
+              onPressed: () {},
+            ),
+            const SizedBox(width: 8),
+          ],
         ),
-        title: const Text(
-          'Hi, Smriti',
-          style: TextStyle(
-              color: Colors.black, fontWeight: FontWeight.w700, fontSize: 24),
-        ),
-        actions: [
-          IconButton(
-            icon: Image.asset('assets/icons/bell.png', width: 24, height: 24),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Image.asset('assets/icons/mail.png', width: 24, height: 24),
-            onPressed: () {},
-          ),
-          const SizedBox(width: 8),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
-                    Text("Step 2:",
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: const [
+                      Text("Step 2:",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold)),
+                      Text("Create classes", style: TextStyle(fontSize: 16)),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                _buildStepper(),
+                const SizedBox(height: 20),
+
+                // Create Live Session Button
+                ElevatedButton(
+                  onPressed: () {
+                    _showCreateLiveSessionForm(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: primaryColorCode,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.add,
+                        color: Colors.white,
+                        size: 18,
+                      ),
+                      SizedBox(width: 8),
+                      const Text(
+                        'Create Live Session',
                         style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold)),
-                    Text("Create classes", style: TextStyle(fontSize: 16)),
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                
+                BlocConsumer<ClassScheduleBloc, ClassScheduleState>( listener: (context, state) {
+                  if (state is ClassScheduleUpdated) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("Schedule updated successfully!"),
+                      backgroundColor: Colors.green,
+                    ));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => LiveStepThreeScreen()),
+                    );
+                  } else if (state is ClassScheduleError) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(state.message),
+                      backgroundColor: Colors.red,
+                    ));
+                  }
+                },
+                  builder: (context, state) {
+                    if (state is ClassScheduleLoading) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    if (state is ClassScheduleUpdated) {
+                      return UpdatedScheduleUI(updatedClass: state.updatedClass);
+                    }
+                    return   ElevatedButton(
+                      onPressed: () {
+                        _showCreateLiveSessionForm(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: primaryColorCode,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.add,
+                            color: Colors.white,
+                            size: 18,
+                          ),
+                          SizedBox(width: 8),
+                          const Text(
+                            'Create Live Session',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+
+                SizedBox(height: 20),
+              ],
+            ),
+          ),
+        ),
+        bottomNavigationBar: Container(
+          padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: backGroundColor,
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      spreadRadius: 2,
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
                   ],
                 ),
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back_ios, color: Colors.grey),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
               ),
-              const SizedBox(height: 20),
-              _buildStepper(),
-              const SizedBox(height: 20),
-
-              // Create Live Session Button
+              SizedBox(
+                width: 10,
+              ),
               ElevatedButton(
                 onPressed: () {
-                  _showCreateLiveSessionForm(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => LiveStepThreeScreen()),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: primaryColorCode,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.add,
-                      color: Colors.white,
-                      size: 18,
-                    ),
-                    SizedBox(width: 8),
-                    const Text(
-                      'Create Live Session',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ],
+                child: const Text(
+                  "Next",
+                  style: TextStyle(fontSize: 16, color: color_E4DFDF),
                 ),
               ),
-              SizedBox(height: 20),
             ],
           ),
-        ),
-      ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: backGroundColor,
-                borderRadius: BorderRadius.circular(8),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    spreadRadius: 2,
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: IconButton(
-                icon: const Icon(Icons.arrow_back_ios, color: Colors.grey),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => LiveStepThreeScreen()),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: primaryColorCode,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-              ),
-              child: const Text(
-                "Next",
-                style: TextStyle(fontSize: 16, color: color_E4DFDF),
-              ),
-            ),
-          ],
         ),
       ),
     );

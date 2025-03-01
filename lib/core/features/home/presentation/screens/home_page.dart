@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:v_library/core/features/home/presentation/screens/home_course_screen.dart';
 import 'package:v_library/core/features/home/presentation/screens/live_course/course_create/step_1_screen.dart';
 import 'package:v_library/core/features/home/presentation/screens/record_course/course_create/step_1_screen.dart';
 import 'package:v_library/core/utils/colors.dart';
+
+import '../../../../../bloc/course_bloc/course_bloc.dart';
+import '../../../../../bloc/course_bloc/course_event.dart';
+import '../../../../../repository/course_repo.dart';
+import 'list_item/course_list.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -174,7 +180,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         elevation: 0,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 12.0),
+                              vertical: 8.0, horizontal: 8.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -261,52 +267,40 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 // Live Tab
-                Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        'assets/images/home.png',
-                        height: 250,
+
+                Column(
+                  children: [
+                    BlocProvider(
+                      create: (context) =>
+                      CourseBloc(courseRepository: CourseRepository())..add(FetchCourses()),
+                      child: CourseList(),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => LiveStepOneScreen()),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: primaryColorCode,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
-                      const SizedBox(height: 16),
-                      const Text(
-                        "You don’t have any live sessions listed here yet",
+                      child: const Text(
+                        'Create Live Session',
                         style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 24,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 24),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => LiveStepOneScreen()),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: primaryColorCode,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: const Text(
-                          'Create Live Session',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w300,
-                          ),
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w300,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
+
                 // Analytics Tab
                 Center(
                   child: Column(

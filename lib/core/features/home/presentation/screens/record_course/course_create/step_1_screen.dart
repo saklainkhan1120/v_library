@@ -308,10 +308,10 @@ class _RecordStepOneScreenState extends State<RecordStepOneScreen> {
               context.read<CreateCourseBloc>().add(
                 CreateCourse(
                   course: CreateCourseModel(
-                    courseType: "Lecture & Classes",
-                    type: "Live",
-                    courselang: "English",
-                    autoCreateGroup: true,
+                    courseType: selectedCourseType,
+                    type: selectedType,
+                    courselang: textController.text,
+                    autoCreateGroup: isActive,
                   ),
                 ),
               );

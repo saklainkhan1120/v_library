@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:v_library/core/features/home/presentation/screens/live_course/course_create/step_1_screen2.dart';
 import 'package:v_library/core/features/home/presentation/screens/live_course/course_create/step_2_screen.dart';
 import 'package:v_library/core/utils/colors.dart';
+
+import '../../../../../../../bloc/course_bloc/course_bloc.dart';
+import '../../../../../../../bloc/course_bloc/course_event.dart';
+import '../../../../../../../bloc/course_bloc/course_state.dart';
+import '../../../../../../../model/course.dart';
 
 class LiveStepOneScreen extends StatefulWidget {
   const LiveStepOneScreen({super.key});
@@ -277,28 +283,60 @@ class _LiveStepOneScreenState extends State<LiveStepOneScreen> {
                     ),
                   ),
                   const SizedBox(width: 10),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => StepTwoScreen()),
-                      );
+
+                  BlocConsumer<CreateCourseBloc, CreateCourseState>(
+                    listener: (context, state) {
+                      if (state is CreateCourseSuccess) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Course Created Successfully!")),
+                        );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => StepTwoScreen()),
+                        );
+                      } else if (state is CreateCourseFailure) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Error: ${state.error}")),
+                        );
+                      }
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: primaryColorCode,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
+                    builder: (context, state) {
+                      if (state is CourseLoading) {
+                        return CircularProgressIndicator();
+                      }
+                      return   ElevatedButton(
+                        onPressed: () {
+                          context.read<CreateCourseBloc>().add(
+                            CreateCourse(
+                              course: CreateCourseModel(
+                                courseType: selectedCourseType,
+                                type: selectedType,
+                                courselang: textController.text,
+                                autoCreateGroup: isActive,
+                              ),
+                            ),
+                          );
+
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: primaryColorCode,
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
                             BorderRadius.circular(8), // Slightly rounded
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 12),
-                    ),
-                    child: const Text(
-                      "Next",
-                      style: TextStyle(fontSize: 16, color: color_E4DFDF),
-                    ),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 12),
+                        ),
+                        child: const Text(
+                          "Next",
+                          style: TextStyle(fontSize: 16, color: color_E4DFDF),
+                        ),
+                      );
+
+                    },
                   ),
+
                 ],
               ),
             ],

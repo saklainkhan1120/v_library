@@ -5,10 +5,11 @@ import 'package:v_library/model/course.dart';
 import 'package:v_library/network/api_url.dart';
 
 import '../model/course_model.dart';
+import '../model/live_class.dart';
 
 class CourseRepository {
-  Future<List<Course>> fetchCourses() async {
-    String url = ApiUrl.getCourse;
+  Future<List<Course>> fetchLiveCourses() async {
+    String url = ApiUrl.getLiveCourse;
     print("Fetching courses from: $url");
 
     try {
@@ -37,19 +38,12 @@ class CourseRepository {
   Future<void> createCourse(CreateCourseModel course) async {
     String url = ApiUrl.createCourse;
     print("Fetching courses from: $url");
-    // Map<String, dynamic> requestBody = {
-    //   "courseType": "Lecture & Classes",
-    //   "type": "Live",
-    //   "courselang": "English",
-    //   "autoCreateGroup": true
-    // };
-
     try {
       final response = await http.post(
         Uri.parse(url),
         headers: {
           "Content-Type": "application/json",
-          "Accept": "application/json",
+          // "Accept": "application/json",
         },
         body: jsonEncode(course.toJson()),
       );
@@ -66,5 +60,25 @@ class CourseRepository {
       print("Error creating course: $e");
     }
   }
+  
+  Future<LiveClass?> updateClassSchedule(String classId, Map<String, dynamic> scheduleData) async {
+    try {
+      String url = ApiUrl.addClassSchedule(classId);
 
+      final response = await http.put(
+        Uri.parse(url),
+        body: jsonEncode(scheduleData),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return LiveClass.fromJson(data['liveClass']);
+      }
+      return null;
+    } catch (e) {
+      print("Error updating class schedule: $e");
+      return null;
+    }
+  }
 }

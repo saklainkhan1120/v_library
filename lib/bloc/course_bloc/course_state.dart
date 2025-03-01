@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import '../../model/course_model.dart';
+import '../../model/live_class.dart';
 
 abstract class CourseState extends Equatable {
   @override
@@ -47,4 +48,31 @@ class CreateCourseFailure extends CreateCourseState {
 
   @override
   List<Object> get props => [error];
+}
+
+abstract class ClassScheduleState extends Equatable {
+  @override
+  List<Object> get props => [];
+}
+
+class ClassScheduleInitial extends ClassScheduleState {}
+
+class ClassScheduleLoading extends ClassScheduleState {}
+
+class ClassScheduleUpdated extends ClassScheduleState {
+  final LiveClass updatedClass;
+
+  ClassScheduleUpdated({required this.updatedClass});
+
+  @override
+  List<Object> get props => [updatedClass];
+}
+
+class ClassScheduleError extends ClassScheduleState {
+  final String message;
+
+  ClassScheduleError({required this.message});
+
+  @override
+  List<Object> get props => [message];
 }

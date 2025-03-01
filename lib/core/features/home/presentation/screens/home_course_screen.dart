@@ -154,11 +154,6 @@ class _HomeScreenState extends State<HomeScreenCourse> {
 
           // Course Card
 
-          BlocProvider(
-            create: (context) =>
-            CourseBloc(courseRepository: CourseRepository())..add(FetchCourses()),
-            child: CourseList(),
-          ),
 
 
         ],
