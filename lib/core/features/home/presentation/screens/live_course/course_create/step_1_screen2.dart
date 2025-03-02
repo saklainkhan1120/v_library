@@ -313,11 +313,11 @@ class _StepOneScreenState extends State<LiveStepOneScreentwo> {
                   const SizedBox(width: 10),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => StepTwoScreen()),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //       builder: (context) => StepTwoScreen()),
+                      // );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: primaryColorCode,

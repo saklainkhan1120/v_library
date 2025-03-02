@@ -40,7 +40,11 @@ class CreateCourseInitial extends CreateCourseState {}
 
 class CreateCourseLoading extends CreateCourseState {}
 
-class CreateCourseSuccess extends CreateCourseState {}
+class CreateCourseSuccess extends CreateCourseState {
+  final String? courseId;
+  CreateCourseSuccess({required this.courseId});
+
+}
 
 class CreateCourseFailure extends CreateCourseState {
   final String error;

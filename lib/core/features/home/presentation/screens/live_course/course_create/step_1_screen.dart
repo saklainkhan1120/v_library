@@ -290,10 +290,12 @@ class _LiveStepOneScreenState extends State<LiveStepOneScreen> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text("Course Created Successfully!")),
                         );
+
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => StepTwoScreen()),
+                            builder: (context) => StepTwoScreen(courseId: state.courseId),
+                          ),
                         );
                       } else if (state is CreateCourseFailure) {
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -302,10 +304,10 @@ class _LiveStepOneScreenState extends State<LiveStepOneScreen> {
                       }
                     },
                     builder: (context, state) {
-                      if (state is CourseLoading) {
+                      if (state is CreateCourseLoading) {
                         return CircularProgressIndicator();
                       }
-                      return   ElevatedButton(
+                      return ElevatedButton(
                         onPressed: () {
                           context.read<CreateCourseBloc>().add(
                             CreateCourse(
@@ -317,23 +319,19 @@ class _LiveStepOneScreenState extends State<LiveStepOneScreen> {
                               ),
                             ),
                           );
-
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: primaryColorCode,
                           shape: RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.circular(8), // Slightly rounded
+                            borderRadius: BorderRadius.circular(8),
                           ),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 12),
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                         ),
                         child: const Text(
                           "Next",
                           style: TextStyle(fontSize: 16, color: color_E4DFDF),
                         ),
                       );
-
                     },
                   ),
 

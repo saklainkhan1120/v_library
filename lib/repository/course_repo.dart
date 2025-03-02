@@ -35,15 +35,15 @@ class CourseRepository {
     }
   }
 
-  Future<void> createCourse(CreateCourseModel course) async {
+  Future<String?> createCourse(CreateCourseModel course) async {
     String url = ApiUrl.createCourse;
     print("Fetching courses from: $url");
+
     try {
       final response = await http.post(
         Uri.parse(url),
         headers: {
           "Content-Type": "application/json",
-          // "Accept": "application/json",
         },
         body: jsonEncode(course.toJson()),
       );
@@ -52,12 +52,16 @@ class CourseRepository {
       print("Response Body: ${response.body}");
 
       if (response.statusCode == 201 || response.statusCode == 200) {
-        print("Course created successfully");
+        final responseData = jsonDecode(response.body);
+        String? courseId = responseData["liveClass"]["_id"]; // Extract courseId
+        print("Course ID: $courseId");
+        return courseId;
       } else {
         throw Exception("Failed to create course: ${response.statusCode} - ${response.body}");
       }
     } catch (e) {
       print("Error creating course: $e");
+      throw Exception("Error creating course: $e");
     }
   }
   

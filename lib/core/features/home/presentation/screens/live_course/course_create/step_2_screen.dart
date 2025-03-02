@@ -10,7 +10,8 @@ import '../../../../../../../bloc/course_bloc/course_state.dart';
 import '../../list_item/update_class_schedule.dart';
 
 class StepTwoScreen extends StatefulWidget {
-  const StepTwoScreen({super.key});
+  final String? courseId;
+  const StepTwoScreen({required this.courseId, super.key});
 
   @override
   _StepTwoScreenState createState() => _StepTwoScreenState();
@@ -404,7 +405,7 @@ class _StepTwoScreenState extends State<StepTwoScreen> {
         };
 
                     context.read<ClassScheduleBloc>().add(UpdateClassSchedule(
-                      classId: "123", // Replace with actual ID
+                      classId: widget.courseId ?? '', // Replace with actual ID
                       scheduleData: scheduleData,
                     ));
 
@@ -493,6 +494,36 @@ class _StepTwoScreenState extends State<StepTwoScreen> {
                 const SizedBox(height: 20),
 
                 // Create Live Session Button
+                // ElevatedButton(
+                //   onPressed: () {
+                //     _showCreateLiveSessionForm(context);
+                //   },
+                //   style: ElevatedButton.styleFrom(
+                //     backgroundColor: primaryColorCode,
+                //     shape: RoundedRectangleBorder(
+                //       borderRadius: BorderRadius.circular(8),
+                //     ),
+                //   ),
+                //   child: Row(
+                //     mainAxisSize: MainAxisSize.min,
+                //     children: [
+                //       Icon(
+                //         Icons.add,
+                //         color: Colors.white,
+                //         size: 18,
+                //       ),
+                //       SizedBox(width: 8),
+                //       const Text(
+                //         'Create Live Session',
+                //         style: TextStyle(
+                //           color: Colors.white,
+                //           fontSize: 16,
+                //           fontWeight: FontWeight.w400,
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
                 ElevatedButton(
                   onPressed: () {
                     _showCreateLiveSessionForm(context);
@@ -523,7 +554,6 @@ class _StepTwoScreenState extends State<StepTwoScreen> {
                     ],
                   ),
                 ),
-                
                 BlocConsumer<ClassScheduleBloc, ClassScheduleState>( listener: (context, state) {
                   if (state is ClassScheduleUpdated) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -549,35 +579,387 @@ class _StepTwoScreenState extends State<StepTwoScreen> {
                     if (state is ClassScheduleUpdated) {
                       return UpdatedScheduleUI(updatedClass: state.updatedClass);
                     }
-                    return   ElevatedButton(
-                      onPressed: () {
-                        _showCreateLiveSessionForm(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: primaryColorCode,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Start Date and End Date Row
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    "Start Date",
+                                    style: TextStyle(
+                                        fontSize: 16, fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  TextField(
+                                    controller: startDateController,
+                                    readOnly: true,
+                                    decoration: InputDecoration(
+                                      hintText: "Select start date",
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                        borderSide:
+                                        BorderSide(color: Colors.grey.shade300),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                        borderSide:
+                                        BorderSide(color: Colors.grey.shade300),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                        borderSide: BorderSide(color: primaryColorCode),
+                                      ),
+                                      suffixIcon: IconButton(
+                                        icon: const Icon(Icons.calendar_today),
+                                        onPressed: () async {
+                                          final DateTime? picked = await showDatePicker(
+                                            context: context,
+                                            initialDate: DateTime.now(),
+                                            firstDate: DateTime.now(),
+                                            lastDate: DateTime(2101),
+                                          );
+                                          if (picked != null) {
+                                            setState(() {
+                                              selectedStartDate = picked;
+                                              startDateController.text =
+                                              "${picked.day}/${picked.month}/${picked.year}";
+                                            });
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    "End Date",
+                                    style: TextStyle(
+                                        fontSize: 16, fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  TextField(
+                                    controller: endDateController,
+                                    readOnly: true,
+                                    decoration: InputDecoration(
+                                      hintText: "Select end date",
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                        borderSide:
+                                        BorderSide(color: Colors.grey.shade300),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                        borderSide:
+                                        BorderSide(color: Colors.grey.shade300),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                        borderSide: BorderSide(color: primaryColorCode),
+                                      ),
+                                      suffixIcon: IconButton(
+                                        icon: const Icon(Icons.calendar_today),
+                                        onPressed: () async {
+                                          final DateTime? picked = await showDatePicker(
+                                            context: context,
+                                            initialDate: DateTime.now(),
+                                            firstDate: DateTime.now(),
+                                            lastDate: DateTime(2101),
+                                          );
+                                          if (picked != null) {
+                                            setState(() {
+                                              selectedEndDate = picked;
+                                              endDateController.text =
+                                              "${picked.day}/${picked.month}/${picked.year}";
+                                            });
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.add,
-                            color: Colors.white,
-                            size: 18,
-                          ),
-                          SizedBox(width: 8),
-                          const Text(
-                            'Create Live Session',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
+                        const SizedBox(height: 20),
+
+                        // Start Time and End Time Row
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    "Start Time",
+                                    style: TextStyle(
+                                        fontSize: 16, fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  TextField(
+                                    controller: startTimeController,
+                                    readOnly: true,
+                                    decoration: InputDecoration(
+                                      hintText: "Select start time",
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                        borderSide:
+                                        BorderSide(color: Colors.grey.shade300),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                        borderSide:
+                                        BorderSide(color: Colors.grey.shade300),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                        borderSide: BorderSide(color: primaryColorCode),
+                                      ),
+                                      suffixIcon: IconButton(
+                                        icon: const Icon(Icons.access_time),
+                                        onPressed: () async {
+                                          final TimeOfDay? picked =
+                                          await showTimePicker(
+                                            context: context,
+                                            initialTime: TimeOfDay.now(),
+                                          );
+                                          if (picked != null) {
+                                            setState(() {
+                                              selectedStartTime = picked;
+                                              startTimeController.text =
+                                              "${picked.hour}:${picked.minute}";
+                                            });
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    "End Time",
+                                    style: TextStyle(
+                                        fontSize: 16, fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  TextField(
+                                    controller: endTimeController,
+                                    readOnly: true,
+                                    decoration: InputDecoration(
+                                      hintText: "Select end time",
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                        borderSide:
+                                        BorderSide(color: Colors.grey.shade300),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                        borderSide:
+                                        BorderSide(color: Colors.grey.shade300),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                        borderSide: BorderSide(color: primaryColorCode),
+                                      ),
+                                      suffixIcon: IconButton(
+                                        icon: const Icon(Icons.access_time),
+                                        onPressed: () async {
+                                          final TimeOfDay? picked =
+                                          await showTimePicker(
+                                            context: context,
+                                            initialTime: TimeOfDay.now(),
+                                          );
+                                          if (picked != null) {
+                                            setState(() {
+                                              selectedEndTime = picked;
+                                              endTimeController.text =
+                                              "${picked.hour}:${picked.minute}";
+                                            });
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+
+                        // Column for 3 Text Fields
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // 1. No. of live lectures
+                            const Text(
+                              "No. of live lectures",
+                              style:
+                              TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 10),
+                            DropdownButtonFormField<String>(
+                              decoration: InputDecoration(
+                                hintText: "1 to 100",
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide(color: Colors.grey.shade300),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide(color: Colors.grey.shade300),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide(color: primaryColorCode),
+                                ),
+                              ),
+                              value: selectedNumberOfLectures,
+                              items:
+                              List.generate(100, (index) => (index + 1).toString())
+                                  .map((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  selectedNumberOfLectures = newValue;
+                                });
+                              },
+                            ),
+                            const SizedBox(height: 20),
+
+                            // 2. Frequency of classes
+                            const Text(
+                              "Frequency of classes",
+                              style:
+                              TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 10),
+                            DropdownButtonFormField<String>(
+                              decoration: InputDecoration(
+                                hintText: "Options here",
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide(color: Colors.grey.shade300),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide(color: Colors.grey.shade300),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide(color: primaryColorCode),
+                                ),
+                              ),
+                              value: selectedFrequency,
+                              items: ["Daily", "Weekly", "Monthly"].map((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  selectedFrequency = newValue;
+                                });
+                              },
+                            ),
+                            const SizedBox(height: 20),
+
+                            // 3. Toggle Switch with Text Field
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  "Custom frequency",
+                                  style: TextStyle(
+                                      fontSize: 16, fontWeight: FontWeight.bold),
+                                ),
+                                Switch(
+                                  value: isSwitchEnabled,
+                                  onChanged: (bool value) {
+                                    setState(() {
+                                      isSwitchEnabled = value;
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            TextField(
+                              decoration: InputDecoration(
+                                hintText: "One class in every (days)",
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide(color: Colors.grey.shade300),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide(color: Colors.grey.shade300),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide(color: primaryColorCode),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+
+                        // Done Button
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context); // Close the dialog
+
+                            final Map<String, dynamic> scheduleData = {
+                              "startDate": startDateController.text,
+                              "endDate": endDateController.text,
+                              "startTime": startTimeController.text,
+                              "endTime": endTimeController.text,
+                              "numberOfClasses": int.tryParse(selectedNumberOfLectures?? '0') ?? 0,
+                              "frequency": selectedFrequency,
+                              "customFrequency": customFrequencyController.text.split(","),
+                            };
+
+                            context.read<ClassScheduleBloc>().add(UpdateClassSchedule(
+                              classId: widget.courseId ?? '', // Replace with actual ID
+                              scheduleData: scheduleData,
+                            ));
+
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: primaryColorCode,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
                             ),
                           ),
-                        ],
-                      ),
+                          child: const Text(
+                            'Done',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],
                     );
                   },
                 ),

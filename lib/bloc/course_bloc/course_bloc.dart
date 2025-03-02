@@ -22,7 +22,6 @@ class CourseBloc extends Bloc<CourseEvent, CourseState> {
     }
   }
 }
-
 class CreateCourseBloc extends Bloc<CreateCourseEvent, CreateCourseState> {
   final CourseRepository repository;
 
@@ -35,8 +34,8 @@ class CreateCourseBloc extends Bloc<CreateCourseEvent, CreateCourseState> {
     emit(CreateCourseLoading());
 
     try {
-      await repository.createCourse(event.course);
-      emit(CreateCourseSuccess());
+      final courseId = await repository.createCourse(event.course);
+      emit(CreateCourseSuccess(courseId: courseId)); // Pass courseId in state
     } catch (e) {
       emit(CreateCourseFailure(error: e.toString()));
     }
