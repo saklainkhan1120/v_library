@@ -46,11 +46,14 @@ class OnboaringPage extends StatelessWidget {
             // Single Row of Icons
             Padding(
               padding: const EdgeInsets.only(top: 20.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: gridItems.map((item) {
-                  return _buildGridItem(context, item);
-                }).toList(),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: gridItems.map((item) {
+                    return _buildGridItem(context, item);
+                  }).toList(),
+                ),
               ),
             ),
           ],

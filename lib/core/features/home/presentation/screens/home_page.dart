@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:v_library/core/features/home/presentation/screens/home_course_screen.dart';
 import 'package:v_library/core/features/home/presentation/screens/live_course/course_create/step_1_screen.dart';
 import 'package:v_library/core/features/home/presentation/screens/record_course/course_create/step_1_screen.dart';
 import 'package:v_library/core/utils/colors.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-
+  const HomeScreen({super.key});
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -57,7 +55,6 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Image.asset('assets/icons/bell.png', width: 24, height: 24),
             onPressed: () {},
           ),
-          // const SizedBox(width: 4), // Reduced gap between icons
           IconButton(
             icon: Image.asset('assets/icons/mail.png', width: 24, height: 24),
             onPressed: () {},
@@ -187,16 +184,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: 18,
                               ),
                               const SizedBox(width: 6),
-                              Text(
-                                tabs[index]['label'],
-                                style: TextStyle(
-                                  color: isSelected
-                                      ? primaryColorCode
-                                      : const Color(0xFFAEAEAE),
-                                  fontSize: 14,
-                                  fontWeight: isSelected
-                                      ? FontWeight.bold
-                                      : FontWeight.w600,
+                              Expanded(
+                                // Fix: Added Expanded here
+                                child: Text(
+                                  tabs[index]['label'],
+                                  style: TextStyle(
+                                    color: isSelected
+                                        ? primaryColorCode
+                                        : const Color(0xFFAEAEAE),
+                                    fontSize: 14,
+                                    fontWeight: isSelected
+                                        ? FontWeight.bold
+                                        : FontWeight.w600,
+                                  ),
+                                  overflow: TextOverflow
+                                      .ellipsis, // Text truncate with ellipsis
                                 ),
                               ),
                             ],
