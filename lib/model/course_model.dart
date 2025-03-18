@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 class Course {
   final bool isActive;

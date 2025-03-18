@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../utils/colors.dart';
 
 class SearchWidget extends StatelessWidget {
   final Function(String val) onChange;

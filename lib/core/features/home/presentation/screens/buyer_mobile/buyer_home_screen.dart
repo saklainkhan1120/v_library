@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:v_library/core/features/Widgets/app_button_widget.dart';
-import 'package:v_library/core/features/Widgets/app_drop_down.dart';
 import 'package:v_library/core/features/Widgets/appbar_widget.dart';
 import 'package:v_library/core/features/Widgets/search_widget.dart';
 import 'package:v_library/core/features/home/presentation/screens/buyer_mobile/buyer_room_screen.dart';
@@ -224,7 +223,7 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen>
                                 verticalInside: BorderSide(
                                   color: secondryTextColor.withOpacity(0.5),
                                 )),
-                            headingRowColor: MaterialStateProperty.all(
+                            headingRowColor: WidgetStateProperty.all(
                                 primaryColorCode.withOpacity(0.2)),
                             columns: const [
                               DataColumn(

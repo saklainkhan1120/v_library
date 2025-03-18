@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:v_library/core/features/home/presentation/screens/live_course/course_create/step_2_screen_2.dart';
-import 'package:v_library/core/features/home/presentation/screens/live_course/course_create/step_3_screen.dart';
-import 'package:v_library/core/features/home/presentation/screens/record_course/course_create/step_3_screen_2.dart';
 import 'package:v_library/core/features/home/presentation/screens/record_course/course_create/step_4_additional_2.dart';
-import 'package:v_library/core/features/home/presentation/screens/record_course/course_create/step_4_screen.dart';
 import 'package:v_library/core/utils/colors.dart';
 
 class RecordStepThreeScreen extends StatefulWidget {

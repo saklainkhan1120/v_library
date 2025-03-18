@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:v_library/core/features/home/presentation/screens/live_course/course_create/step_2_screen_2.dart';
-import 'package:v_library/core/features/home/presentation/screens/live_course/course_create/step_4_screen_2.dart';
 import 'package:v_library/core/features/home/presentation/screens/live_course/course_create/step_5_screen.dart';
 import 'package:v_library/core/utils/colors.dart';
 

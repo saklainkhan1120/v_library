@@ -8,6 +8,8 @@ import '../../../../../utils/colors.dart';
 import '../live_course/course_create/step_1_screen.dart';
 
 class CourseList extends StatelessWidget {
+  const CourseList({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CourseBloc, CourseState>(

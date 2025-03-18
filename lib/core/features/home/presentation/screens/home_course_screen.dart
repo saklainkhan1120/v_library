@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:v_library/bloc/course_bloc/course_bloc.dart';
-import 'package:v_library/repository/course_repo.dart';
 
-import '../../../../../bloc/course_bloc/course_event.dart';
-import 'list_item/course_list.dart';
 
 class HomeScreenCourse extends StatefulWidget {
-  const HomeScreenCourse({Key? key}) : super(key: key);
+  const HomeScreenCourse({super.key});
 
   @override
   State<HomeScreenCourse> createState() => _HomeScreenState();

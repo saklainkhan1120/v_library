@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:v_library/core/features/home/presentation/screens/live_course/course_create/step_4_screen.dart';
-import 'package:v_library/core/features/home/presentation/screens/record_course/course_create/step_4_screen.dart';
 import 'package:v_library/core/utils/colors.dart';
 
 class LiveStepThreeScreen extends StatefulWidget {

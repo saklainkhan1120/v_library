@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Step1Screen extends StatefulWidget {
+  const Step1Screen({super.key});
+
   @override
   _Step1ScreenState createState() => _Step1ScreenState();
 }
@@ -169,10 +171,10 @@ class _Step1ScreenState extends State<Step1Screen> {
                 onPressed: () {
                   // Navigate to Step 2
                 },
-                child: Text("Next"),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orange,
                 ),
+                child: Text("Next"),
               ),
             ),
           ],

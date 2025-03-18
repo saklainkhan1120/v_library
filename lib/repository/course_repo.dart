@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:v_library/bloc/course_bloc/course_event.dart';
 import 'package:v_library/model/course.dart';
 import 'package:v_library/network/api_url.dart';
 

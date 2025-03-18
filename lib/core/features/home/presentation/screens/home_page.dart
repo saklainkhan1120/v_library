@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:v_library/core/features/home/presentation/screens/home_course_screen.dart';
 import 'package:v_library/core/features/home/presentation/screens/live_course/course_create/step_1_screen.dart';
 import 'package:v_library/core/features/home/presentation/screens/record_course/course_create/step_1_screen.dart';
 import 'package:v_library/core/utils/colors.dart';
@@ -11,7 +10,7 @@ import '../../../../../repository/course_repo.dart';
 import 'list_item/course_list.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();

@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:v_library/model/course.dart';
-import 'package:v_library/model/course_model.dart';
 
 abstract class CourseEvent extends Equatable {
   @override
